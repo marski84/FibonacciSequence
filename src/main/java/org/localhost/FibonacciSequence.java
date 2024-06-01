@@ -5,7 +5,7 @@ import java.util.List;
 
 public class FibonacciSequence {
     private final int NUMBERS_COUNT = 3;
-//    tutaj nie wiem które z rozwiązań jest bardziej prawiwłowe- czy private final czy BigInterger.ONE
+//    tutaj nie wiem które z rozwiązań jest bardziej prawiwdłowe- czy private final czy BigInterger.ONE
     private final int MIN_SEQUENCE_LENGTH = 1;
 
     public int[] generateSequence(List<Integer> list, int size) {
@@ -21,9 +21,8 @@ public class FibonacciSequence {
 //        użycie rozwiązania w pętli wynika z gorszej wydajności rekurencji w przypadku tego typu operacji
         for(int i = 3; i < size; i++) {
             sequence[i] = sequence[i-1] + sequence[i-2] + sequence[i-3];
-            System.out.println(sequence[i]);
         }
-        System.out.println(sequence);
+//        System.out.println(sequence);
         return sequence;
     }
 
