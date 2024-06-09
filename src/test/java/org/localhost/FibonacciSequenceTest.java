@@ -1,72 +1,54 @@
 package org.localhost;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FibonacciSequenceTest {
 
-    private final FibonacciSequence fibonacciSequence = new FibonacciSequence();
+    private final FibonacciSequence objectUnderTest = new FibonacciSequence();
 
-    @Test
-    @DisplayName("It should return fibonacci sequence")
-    public void itShouldReturnFibonacciSequenceWithValidSize() {
-        List<Integer> inputList = List.of(1, 1, 2);
-        int[] result = fibonacciSequence.generateSequence(inputList, 10);
-        int[] expectedResult = {1, 1, 2, 4, 7, 13, 24, 44, 81, 149};
-
-        assertEquals(result.length, expectedResult.length);
+    private static Stream<Arguments> generateData() {
+        return Stream.of(
+                Arguments.of(List.of(1,1,2), 10, List.of(1, 1, 2, 4, 7, 13, 24, 44, 81, 149)),
+                Arguments.of(List.of(4, 7, 13), 15, List.of(4, 7, 13, 24, 44, 81, 149, 274, 504, 927, 1705, 3136, 5768, 10609, 19513))
+        );
     }
 
-    @Test
-    @DisplayName("It should return fibonacci sequence")
-    public void itShouldReturnValidFibonacciSequence() {
-        List<Integer> inputList = List.of(4, 7, 13);
-        int[] result = fibonacciSequence.generateSequence(inputList, 10);
-        int[] expectedResult = {4, 7, 13, 24, 44, 81, 149, 274, 504, 927};
-
-        assertEquals(result[result.length -1], expectedResult[result.length -1]);
+    private static Stream<Arguments> generateInvalidData() {
+        return Stream.of(
+                Arguments.of(List.of(1,2), 10),
+                Arguments.of(List.of(1, 1, 2, 4), 10),
+                Arguments.of(null, 10),
+                Arguments.of(List.of(1,2, 2), 0),
+                Arguments.of(List.of(1,2, 2), -1)
+                );
     }
 
-    @Test
-    public void itShouldThrowWhenListArgumentHasTwoRecords() {
-        List<Integer> inputList = List.of(1, 1);
-        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            fibonacciSequence.generateSequence(inputList, 10);
+
+    @ParameterizedTest
+    @MethodSource("generateData")
+    @DisplayName("It should generate valid fibonacci sequence")
+    public void generateValidSequence(List<Integer> input, int size, List<Integer> expected) {
+        //given
+        List<Integer> result = objectUnderTest.generateSequence(input, size);
+        //when
+        assertEquals(expected, result);
+        assertEquals(expected.size(), result.size());
+    }
+
+    @ParameterizedTest
+    @MethodSource("generateInvalidData")
+    @DisplayName("generateSequence should throw when given invalid arguments")
+    public void generateSequenceInvalidArguments(List<Integer> input, int size) {
+//        given
+        assertThrows(IllegalArgumentException.class, () -> {
+            objectUnderTest.generateSequence(input, size);
         });
     }
-
-    @Test
-    public void itShouldThrowWhenListArgumentHasFourRecords() {
-        List<Integer> inputList = List.of(1, 1, 2, 4);
-        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            fibonacciSequence.generateSequence(inputList, 10);
-        });
-    }
-
-    @Test
-    public void itShouldThrowWhenListArgumentIsNull() {
-        List<Integer> inputList = null;
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            fibonacciSequence.generateSequence(inputList, 10);
-        });
-    }
-
-    @Test
-    public void itShouldThrowWhenSizeArgumentToLow() {
-        List<Integer> inputList = List.of(1, 1, 2);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            fibonacciSequence.generateSequence(inputList, 0);
-        });
-    }
-
-    @Test
-    public void itShouldThrowWhenSizeArgumentIsNegative() {
-        List<Integer> inputList = List.of(1, 1, 2);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            fibonacciSequence.generateSequence(inputList, -10);
-        });
-    }
-
 }

@@ -9,9 +9,9 @@ public class Main {
     public static void main(String[] args) {
         FibonacciSequence fibonacciSequence = new FibonacciSequence();
 
-        List<Integer> inputList = List.of(4, 7, 13);
+        List<Integer> inputList = List.of(1,1,2);
 
         var result = fibonacciSequence.generateSequence(inputList, 10);
-        System.out.println(Arrays.toString(result));
+        System.out.println(result);
     }
 }
